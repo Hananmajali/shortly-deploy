@@ -1,8 +1,15 @@
-module.exports = function(grunt) {
+module.exports = function(grunt) { //wrapper funcion
 
-  grunt.initConfig({
-    pkg: grunt.file.readJSON('package.json'),
+  grunt.initConfig({  //Most Grunt tasks rely on configuration data defined in an object passed to the grunt.initConfig method.
+    pkg: grunt.file.readJSON('package.json'), //imports the JSON metadata stored in package.json
     concat: {
+      options: {
+        separator: ';',
+      },
+      dist: {
+        src: ['/public/client/**/*.js'],
+        dest: 'dist/built.js',
+      },
     },
 
     mochaTest: {
@@ -21,21 +28,35 @@ module.exports = function(grunt) {
     },
 
     uglify: {
+      options: {
+        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n' // what ? 
+      },
+      build: {
+        src: ['/public/client/**/*.js'], //uglify these files 
+        dest: 'dist/uglified.js', //will create this
+      },
     },
 
     eslint: {
+      options: { //?
+         configFile: '.eslintrc.js',
+      },
       target: [
-        // Add list of files to lint here
+        'server-config.js',
+        'server.js',
+        'gruntfile.js'
       ]
     },
 
-    cssmin: {
+    cssmin: { //run by watch task ...
+
+
     },
 
     watch: {
       scripts: {
         files: [
-          'public/client/**/*.js',
+          'public/**/*.js',
           'public/lib/**/*.js',
         ],
         tasks: [
@@ -51,8 +72,10 @@ module.exports = function(grunt) {
 
     shell: {
       prodServer: {
+
       }
     },
+
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -77,11 +100,13 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('build', [
+    'concat'
   ]);
-
   grunt.registerTask('upload', function(n) {
+    //grunt.run.task('default' , 'uglify'); //example ..
     if (grunt.option('prod')) {
       // add your production server task here
+
     } else {
       grunt.task.run([ 'server-dev' ]);
     }
@@ -91,5 +116,10 @@ module.exports = function(grunt) {
     // add your deploy tasks here
   ]);
 
+  grunt.registerTask('default', [
+    'concat' ,
+    'uglify',
+    'eslint' //suggestion !!
+    ]);
 
 };
