@@ -41,12 +41,12 @@ module.exports = db;
 */
 
 var db = require('mongoose');
-var schema = mongoose.Schema;
+var schema = mongoose.Schema ;
 
 
 
 
-var urls = new schema ({
+var urlsT = new schema ({
   id :  {type : Number , default : null} ,
   url : {type : String , default : null},
   baseUrl : {type : Number , default : null},
@@ -57,6 +57,15 @@ var urls = new schema ({
 })
 
 db.urls = mongoose.model('urls', urls );
+
+var users = new schema ({
+  id :  {type : Schema.ObjectId , default : null } ,
+  username : {type : String , default : null},
+  password : {type : String , default : null},
+  date: { type: Date, default: Date.now } 
+})
+
+db.users = mongoose.model('users', users );
 
 
 

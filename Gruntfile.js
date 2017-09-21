@@ -70,8 +70,8 @@ module.exports = function(grunt) { //wrapper funcion
       prodServer: {
           
       }
-    },
-    option : 'prod' 
+    }
+    
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -127,7 +127,7 @@ module.exports = function(grunt) { //wrapper funcion
 
   grunt.registerTask('deploy', [ 
     //Add a prod option such that when you run grunt deploy --prod you will prepare your code base for production and push it up to the production droplet
-    
+
     // add your deploy tasks here
     //concat
     //uglify
