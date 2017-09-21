@@ -7,7 +7,7 @@ module.exports = function(grunt) { //wrapper funcion
         separator: ';',
       },
       dist: {
-        src: ['/public/client/**/*.js'],
+        src: ['public/**/*.js'],
         dest: 'dist/built.js',
       },
     },
@@ -28,11 +28,8 @@ module.exports = function(grunt) { //wrapper funcion
     },
 
     uglify: {
-      options: {
-        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n' // what ? 
-      },
-      build: {
-        src: ['/public/client/**/*.js'], //uglify these files 
+      dist: {
+        src: ['dist/built.js'], //uglify these files 
         dest: 'dist/uglified.js', //will create this
       },
     },
@@ -49,8 +46,7 @@ module.exports = function(grunt) { //wrapper funcion
     },
 
     cssmin: { //run by watch task ...
-
-
+      tasks : '?????????'
     },
 
     watch: {
@@ -72,10 +68,10 @@ module.exports = function(grunt) { //wrapper funcion
 
     shell: {
       prodServer: {
-
+          
       }
     },
-
+    option : 'prod' 
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -95,31 +91,46 @@ module.exports = function(grunt) { //wrapper funcion
   // Main grunt tasks
   ////////////////////////////////////////////////////
 
+
+  
   grunt.registerTask('test', [
     'mochaTest'
   ]);
 
-  grunt.registerTask('build', [
-    'concat'
+  grunt.registerTask('build', [ //you will prepare your code base for production 
+    'concat',
+    'uglify' ,
   ]);
+
   grunt.registerTask('upload', function(n) {
     //grunt.run.task('default' , 'uglify'); //example ..
     if (grunt.option('prod')) {
       // add your production server task here
+      // push it up to the production droplet :
+        
+        //Run eslint before deployment. 
+        grunt.task.run('eslint');
+        grunt.task.run('mochaTest'); //Run your Mocha tests before deployment. If any tests fail, the build process should exit
+        console.log('after eslint hi ');
+        //If eslint fails, 
+          //the build process should exit
+
+        //if eslint success 
+          grunt.task.run ('deploy');   //upload files or run // globally ??
+
+        //grunt.task.run([ 'server-dev' ]); //to remove later 
 
     } else {
-      grunt.task.run([ 'server-dev' ]);
+      grunt.task.run([ 'server-dev' ]); // => npm start
     }
   });
 
-  grunt.registerTask('deploy', [
+  grunt.registerTask('deploy', [ 
+    //Add a prod option such that when you run grunt deploy --prod you will prepare your code base for production and push it up to the production droplet
+    
     // add your deploy tasks here
+    //concat
+    //uglify
+    grunt.task.run([ 'server-dev' ]);
   ]);
-
-  grunt.registerTask('default', [
-    'concat' ,
-    'uglify',
-    'eslint' //suggestion !!
-    ]);
-
 };

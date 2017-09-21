@@ -5,7 +5,7 @@ var knex = require('knex')({
     filename: path.join(__dirname, '../db/shortly.sqlite')
   },
   useNullAsDefault: true
-});
+});/*
 var db = require('bookshelf')(knex);
 
 db.knex.schema.hasTable('urls').then(function(exists) {
@@ -38,3 +38,34 @@ db.knex.schema.hasTable('users').then(function(exists) {
 });
 
 module.exports = db;
+*/
+
+var db = require('mongoose');
+var schema = mongoose.Schema;
+
+
+
+
+var urls = new schema ({
+  id :  {type : Number , default : null} ,
+  url : {type : String , default : null},
+  baseUrl : {type : Number , default : null},
+  code : { type: String, default: null},
+  title : { type: String, default: 'index'},
+  visits :  { type: Number, default: 0 },
+  date: { type: Date, default: Date.now } 
+})
+
+db.urls = mongoose.model('urls', urls );
+
+
+
+
+
+
+module.exports = db;
+
+
+
+
+
